@@ -1,31 +1,21 @@
 pipeline {
-    agent any
-    
-    stages{
-        
-        stage ('clean-up') {
-            steps {
-                cleanWs()
-            }
-        }
-        
-        stage ('build') {
-            steps {
-                
-                    sh 'mvn clean install'
-                
-                
-            }
-        }
-        
-        stage ('test') {
-            steps {
-                
+	agent any
+	
+	stages {
+		stage('Build') {
+			steps {
+				sh 'mvn clean install'
+			}
+		}
+		stage('Test') {
+			steps {
+				post {
+				always {
+					junit 'target/surefire-reports/*.xml'
                     archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
-                
-                
-            }
-        }
-        
-    }
+				}
+			}
+		}
+				
+	}
 }
