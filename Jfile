@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    
+    stages{
+        
+        stage ('clean-up') {
+            steps {
+                cleanWs()
+            }
+        }
+        
+        stage ('build') {
+            steps {
+                
+                    sh 'mvn clean install'
+                
+                
+            }
+        }
+        
+        stage ('test') {
+            steps {
+                
+                    archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+                
+                
+            }
+        }
+        
+    }
+}
